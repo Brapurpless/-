@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI教学平台 - 登录</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h2 class="title">AI教学平台</h2>
+        <form action="/login" method="post">
+            <div class="form-group">
+                <label for="username">用户名</label>
+                <input type="text" id="username" name="username" placeholder="请输入用户名" required>
+            </div>
+            <div class="form-group">
+                <label for="password">密码</label>
+                <input type="password" id="password" name="password" placeholder="请输入密码" required>
+            </div>
+            <button type="submit" class="btn">登录</button>
+            {% if error %}
+            <div class="error-message">{{ error }}</div>
+            {% endif %}
+        </form>
+        <div class="role-selector">
+            <p>测试账号:</p>
+            <div class="role-buttons">
+                <button class="role-btn" onclick="fillCredentials('admin', 'admin123')">管理员</button>
+                <button class="role-btn" onclick="fillCredentials('school', 'school123')">学校</button>
+                <button class="role-btn" onclick="fillCredentials('teacher', 'teacher123')">教师</button>
+                <button class="role-btn" onclick="fillCredentials('parent', 'parent123')">家长</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function fillCredentials(username, password) {
+            document.getElementById('username').value = username;
+            document.getElementById('password').value = password;
+            // 高亮选中的角色按钮
+            const buttons = document.querySelectorAll('.role-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>

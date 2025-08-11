@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI教学平台 - 管理员仪表盘</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Microsoft YaHei', sans-serif;
+        }
+        body {
+            background-color: #f5f7fa;
+        }
+        .header {
+            background-color: #4a90e2;
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .logo {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .user-info span {
+            font-size: 16px;
+        }
+        .btn-logout {
+            background-color: transparent;
+            color: white;
+            border: 1px solid white;
+            padding: 6px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .btn-logout:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        .welcome-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        .welcome-card h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .welcome-card p {
+            color: #666;
+            font-size: 16px;
+        }
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .stat-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+        }
+        .stat-card .title {
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        .stat-card .value {
+            color: #333;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .stat-card .trend {
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        .trend.positive {
+            color: #2ecc71;
+        }
+        .trend.negative {
+            color: #e74c3c;
+        }
+        .section-title {
+            color: #333;
+            font-size: 20px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eee;
+        }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .feature-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+        .feature-card h3 {
+            color: #333;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .feature-card p {
+            color: #666;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">AI教学平台</div>
+        <div class="user-info">
+            <span>欢迎，{{ username }} ({{ role }})</span>
+            <a href="/logout"><button class="btn-logout">退出登录</button></a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="welcome-card">
+            <h1>管理员仪表盘</h1>
+            <p>欢迎使用AI教学平台管理系统。从这里您可以访问所有平台功能。</p>
+        </div>
+
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="title">注册学校</div>
+                <div class="value">24</div>
+                <div class="trend positive">↑ 12% 较上月</div>
+            </div>
+            <div class="stat-card">
+                <div class="title">注册教师</div>
+                <div class="value">532</div>
+                <div class="trend positive">↑ 8% 较上月</div>
+            </div>
+            <div class="stat-card">
+                <div class="title">注册家长</div>
+                <div class="value">1,289</div>
+                <div class="trend positive">↑ 15% 较上月</div>
+            </div>
+            <div class="stat-card">
+                <div class="title">生成教案</div>
+                <div class="value">3,742</div>
+                <div class="trend positive">↑ 23% 较上月</div>
+            </div>
+        </div>
+
+        <h2 class="section-title">平台功能</h2>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <h3>用户管理</h3>
+                <p>管理平台上的所有用户账户，包括学校、教师和家长账户。可以添加、编辑或删除用户。</p>
+            </div>
+            <div class="feature-card">
+                <h3>课程管理</h3>
+                <p>管理平台上的所有课程，包括创建新课程、编辑现有课程和删除课程。</p>
+            </div>
+            <div class="feature-card">
+                <h3>AI模型设置</h3>
+                <p>配置AI模型参数，优化教案生成质量，设置不同学科和年级的生成模板。</p>
+            </div>
+            <div class="feature-card">
+                <h3>系统统计</h3>
+                <p>查看平台使用统计数据，包括用户增长、教案生成数量、系统性能等指标。</p>
+            </div>
+            <div class="feature-card">
+                <h3>内容审核</h3>
+                <p>审核AI生成的教案内容，确保符合教育标准和相关规定。</p>
+            </div>
+            <div class="feature-card">
+                <h3>系统设置</h3>
+                <p>配置平台各项系统设置，包括安全设置、邮件通知、数据备份等。</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

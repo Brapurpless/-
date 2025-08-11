@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI教学平台 - 学校仪表盘</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <style>
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        .welcome-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .welcome-image {
+            flex: 1;
+            max-width: 300px;
+            text-align: center;
+        }
+        .welcome-image svg {
+            width: 100%;
+            height: auto;
+            max-width: 200px;
+        }
+        .welcome-text {
+            flex: 2;
+        }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .feature-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 25px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+        .feature-icon {
+            margin-bottom: 15px;
+        }
+        .feature-icon svg {
+            width: 60px;
+            height: 60px;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .stat-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .stat-icon svg {
+            width: 40px;
+            height: 40px;
+        }
+        .stat-info h3 {
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+        .stat-info p {
+            color: #333;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .section-title {
+            color: #333;
+            font-size: 20px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eee;
+        }
+    </style>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Microsoft YaHei', sans-serif;
+        }
+        body {
+            background-color: #f5f7fa;
+        }
+        .header {
+            background-color: #4a90e2;
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .logo {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .user-info span {
+            font-size: 16px;
+        }
+        .btn-logout {
+            background-color: transparent;
+            color: white;
+            border: 1px solid white;
+            padding: 6px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .btn-logout:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        .welcome-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        .welcome-card h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .welcome-card p {
+            color: #666;
+            font-size: 16px;
+        }
+        .section-title {
+            color: #333;
+            font-size: 20px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eee;
+        }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .feature-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+        .feature-card h3 {
+            color: #333;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .feature-card p {
+            color: #666;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+        /* 从styles.css继承按钮样式 */
+        .dashboard-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        .chart-container {
+            height: 300px;
+            margin-top: 20px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #666;
+            font-weight: bold;
+        }
+        .form-group select,
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border 0.3s;
+        }
+        .form-group select:focus,
+        .form-group input:focus {
+            border-color: #4a90e2;
+            outline: none;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">AI教学平台</div>
+        <div class="user-info">
+            <span>欢迎，{{ username }} (学校)</span>
+            <a href="/logout"><button class="btn-logout">退出登录</button></a>
+        </div>
+    </div>
+
+    <div class="dashboard-container">
+        <div class="welcome-section">
+            <div class="welcome-image">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#6c5ce7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path></svg>
+            </div>
+            <div class="welcome-text">
+                <h1>学校仪表盘</h1>
+                <p>欢迎使用AI教学平台学校管理系统。从这里您可以访问课程设计工具和课程实施检测仪表盘，提升教学质量和管理效率。</p>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#6c5ce7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                </div>
+                <div class="stat-info">
+                    <h3>活跃学生</h3>
+                    <p>1,254</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#6c5ce7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M15 18v-2a4 4 0 0 0-3-3.87"></path><path d="M9 5v2"></path><path d="M9 11v2"></path></svg>
+                </div>
+                <div class="stat-info">
+                    <h3>教师团队</h3>
+                    <p>42</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#6c5ce7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                </div>
+                <div class="stat-info">
+                    <h3>课程数量</h3>
+                    <p>85</p>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="section-title">AI课程设计工具</h2>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#6c5ce7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path></svg>
+                </div>
+                <h3>智能教案生成</h3>
+                <p>根据学科、年级和知识点自动生成高质量教案，节省教师备课时间。</p>
+                <button class="btn-primary">开始使用</button>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#6c5ce7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                </div>
+                <h3>互动课件制作</h3>
+                <p>创建生动有趣的互动课件，包含图片、视频和测验，提升课堂参与度。</p>
+                <button class="btn-primary">开始制作</button>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#6c5ce7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg>
+                </div>
+                <h3>作业自动批改</h3>
+                <p>利用AI技术自动批改学生作业，提供详细反馈，减轻教师工作负担。</p>
+                <button class="btn-primary">了解更多</button>
+            </div>
+        </div>
+
+        <div class="dashboard-card">
+            <h3>快速创建课程</h3>
+            <form id="lessonPlanForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="subject">学科</label>
+                        <select id="subject" name="subject" required>
+                            <option value="语文">语文</option>
+                            <option value="数学">数学</option>
+                            <option value="英语">英语</option>
+                            <option value="物理">物理</option>
+                            <option value="化学">化学</option>
+                            <option value="生物">生物</option>
+                            <option value="历史">历史</option>
+                            <option value="地理">地理</option>
+                            <option value="政治">政治</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="grade">年级</label>
+                        <select id="grade" name="grade" required>
+                            <option value="小学一年级">小学一年级</option>
+                            <option value="小学二年级">小学二年级</option>
+                            <option value="小学三年级">小学三年级</option>
+                            <option value="小学四年级">小学四年级</option>
+                            <option value="小学五年级">小学五年级</option>
+                            <option value="小学六年级">小学六年级</option>
+                            <option value="初中一年级">初中一年级</option>
+                            <option value="初中二年级">初中二年级</option>
+                            <option value="初中三年级">初中三年级</option>
+                            <option value="高中一年级">高中一年级</option>
+                            <option value="高中二年级">高中二年级</option>
+                            <option value="高中三年级">高中三年级</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="topic">课题</label>
+                    <input type="text" id="topic" name="topic" placeholder="请输入课题名称" required>
+                </div>
+                <div class="form-group">
+                    <label for="template_type">教案模板</label>
+                    <select id="template_type" name="template_type">
+                        <option value="standard">标准模板 (教学目标/重难点/教学过程/作业设计)</option>
+                        <option value="detailed">详细模板 (包含更多教学环节)</option>
+                        <option value="activity">活动模板 (以活动为中心)</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-primary">生成教案</button>
+            </form>
+            <div id="resultContainer" style="margin-top: 20px; display: none;">
+                <h3>生成的教案</h3>
+                <div id="lessonPlanResult" style="white-space: pre-line; border: 1px solid #ddd; padding: 15px; border-radius: 5px; background-color: #f9f9f9;"></div>
+            </div>
+        </div>
+
+        <h2 class="section-title">课程实施检测仪表盘</h2>
+        <div class="dashboard-card">
+            <div class="chart-container">
+                <!-- 这里将显示课程实施数据图表 -->
+                <p>课程实施数据可视化图表将在此显示</p>
+            </div>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>课程完成率</h3>
+                    <p>监控各班级课程完成情况，及时发现问题并进行干预。</p>
+                </div>
+                <div class="feature-card">
+                    <h3>学生参与度</h3>
+                    <p>分析学生在课堂上的参与情况，了解教学效果。</p>
+                </div>
+                <div class="feature-card">
+                    <h3>教学效果评估</h3>
+                    <p>基于测试成绩和作业完成情况，评估教学效果。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('lessonPlanForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const subject = document.getElementById('subject').value;
+            const grade = document.getElementById('grade').value;
+            const topic = document.getElementById('topic').value;
+            const template_type = document.getElementById('template_type').value;
+            
+            // 显示加载状态
+            document.getElementById('resultContainer').style.display = 'block';
+            document.getElementById('lessonPlanResult').textContent = '正在生成教案，请稍候...';
+            
+            // 调用API生成教案
+            fetch('/api/generate_lesson_plan', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    subject: subject,
+                    grade: grade,
+                    topic: topic,
+                    template_type: template_type
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    document.getElementById('lessonPlanResult').textContent = data.result;
+                } else {
+                    document.getElementById('lessonPlanResult').textContent = '生成教案失败: ' + data.message;
+                }
+            })
+            .catch(error => {
+                document.getElementById('lessonPlanResult').textContent = '生成教案失败: ' + error.message;
+            });
+        });
+    </script>
+
+    <!-- 引入AI助手悬浮窗 -->
+    {% include 'components/chat_float_window.html' %}
+
+</body>
+</html>
