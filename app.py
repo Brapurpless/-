@@ -2,7 +2,10 @@ from flask import Flask, render_template, request, jsonify, session, redirect
 import sqlite3
 import os
 import requests
+from datetime import datetime
 from dotenv import load_dotenv
+from werkzeug.utils import secure_filename
+from flask import Flask, render_template, request, redirect, session, jsonify, send_from_directory
 
 # 加载.env文件中的环境变量
 load_dotenv()
@@ -46,6 +49,75 @@ def init_db():
     c.execute("INSERT OR IGNORE INTO courses (title, subject, grade, creator_id) VALUES ('高中数学', '数学', '高中', 1)")
     conn.commit()
     conn.close()
+
+# 文件上传路由
+@app.route('/upload', methods=['GET', 'POST'])
+def upload_file():
+    if session.get('role') != 'admin':
+        return redirect('/login')
+    
+    if request.method == 'POST':
+        if 'file' not in request.files:
+            return jsonify({'status': 'error', 'message': '没有文件部分'})
+        file = request.files['file']
+        if file.filename == '':
+            return jsonify({'status': 'error', 'message': '没有选择文件'})
+        if file:
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            return jsonify({'status': 'success', 'message': '文件上传成功', 'filename': filename})
+    return render_template('upload.html')
+
+# 文件管理路由 - 列出所有文件
+@app.route('/files')
+def list_files():
+    if session.get('role') != 'admin':
+        return redirect('/login')
+    
+    files = []
+    upload_folder = app.config['UPLOAD_FOLDER']
+    if os.path.exists(upload_folder):
+        for filename in os.listdir(upload_folder):
+            file_path = os.path.join(upload_folder, filename)
+            if os.path.isfile(file_path):
+                file_size = os.path.getsize(file_path) / 1024  # KB
+                modified_time = os.path.getmtime(file_path)
+                files.append({
+                    'name': filename,
+                    'size': f'{file_size:.2f} KB',
+                    'modified': datetime.fromtimestamp(modified_time).strftime('%Y-%m-%d %H:%M:%S')
+                })
+    
+    return render_template('files.html', files=files, username=session.get('username', ''), role=session.get('role', ''))
+
+# 文件下载路由
+@app.route('/files/download/<filename>')
+def download_file(filename):
+    if session.get('role') != 'admin':
+        return redirect('/login')
+    
+    upload_folder = app.config['UPLOAD_FOLDER']
+    file_path = os.path.join(upload_folder, filename)
+    
+    if os.path.exists(file_path) and os.path.isfile(file_path):
+        return send_from_directory(upload_folder, filename, as_attachment=True)
+    else:
+        return jsonify({'status': 'error', 'message': '文件不存在'})
+
+# 文件删除路由
+@app.route('/files/delete/<filename>')
+def delete_file(filename):
+    if session.get('role') != 'admin':
+        return redirect('/login')
+    
+    upload_folder = app.config['UPLOAD_FOLDER']
+    file_path = os.path.join(upload_folder, filename)
+    
+    if os.path.exists(file_path) and os.path.isfile(file_path):
+        os.remove(file_path)
+        return jsonify({'status': 'success', 'message': '文件删除成功'})
+    else:
+        return jsonify({'status': 'error', 'message': '文件不存在'})
 
 # 路由
 @app.route('/')
